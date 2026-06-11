@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PassGuard – Password Strength Analyzer</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🔐</span>
+      <span class="logo-text">PassGuard</span>
+    </div>
+    <nav>
+      <a href="#analyzer">Analyzer</a>
+      <a href="#history">History</a>
+      <a href="#tips">Tips</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="analyzer">
+      <p class="eyebrow">Security Tool · v1.0</p>
+      <h1>How strong is<br/><span class="accent">your password?</span></h1>
+      <p class="subtext">Analyze complexity, spot weaknesses, and generate safer alternatives — all locally in your browser. Nothing is sent to a server.</p>
+    </section>
+
+    <!-- Analyzer Card -->
+    <section class="card analyzer-card">
+      <div class="input-wrap">
+        <label for="password-input">Enter Password</label>
+        <div class="input-row">
+          <input type="password" id="password-input" placeholder="Type your password…" autocomplete="off" spellcheck="false"/>
+          <button class="toggle-btn" id="toggle-visibility" title="Show/Hide Password">
+            <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg id="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <div class="strength-bar-wrap">
+          <div class="strength-bar" id="strength-bar">
+            <div class="strength-fill" id="strength-fill"></div>
+          </div>
+          <span class="strength-label" id="strength-label">—</span>
+        </div>
+      </div>
+
+      <!-- Score + Criteria -->
+      <div class="results-grid">
+        <div class="score-box">
+          <p class="box-title">Score</p>
+          <div class="score-display">
+            <span id="score-num">0</span>
+            <span class="score-denom">/100</span>
+          </div>
+          <p class="score-grade" id="score-grade">Enter a password</p>
+        </div>
+        <div class="criteria-box">
+          <p class="box-title">Criteria Check</p>
+          <ul class="criteria-list" id="criteria-list">
+            <li data-key="length8" class="crit-item"><span class="crit-icon">○</span> At least 8 characters</li>
+            <li data-key="length12" class="crit-item"><span class="crit-icon">○</span> At least 12 characters</li>
+            <li data-key="uppercase" class="crit-item"><span class="crit-icon">○</span> Uppercase letters (A–Z)</li>
+            <li data-key="lowercase" class="crit-item"><span class="crit-icon">○</span> Lowercase letters (a–z)</li>
+            <li data-key="numbers" class="crit-item"><span class="crit-icon">○</span> Numbers (0–9)</li>
+            <li data-key="symbols" class="crit-item"><span class="crit-icon">○</span> Special characters (!@#…)</li>
+            <li data-key="nocommon" class="crit-item"><span class="crit-icon">○</span> Not a common password</li>
+            <li data-key="norepeating" class="crit-item"><span class="crit-icon">○</span> No repeating patterns</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Entropy & Crack Time -->
+      <div class="meta-row">
+        <div class="meta-card">
+          <p class="meta-label">Entropy</p>
+          <p class="meta-value" id="entropy-val">— bits</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Est. Crack Time</p>
+          <p class="meta-value" id="crack-time">—</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Character Set</p>
+          <p class="meta-value" id="charset-val">—</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Length</p>
+          <p class="meta-value" id="length-val">0 chars</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Suggestions -->
+    <section class="card suggestions-card" id="suggestions-section" style="display:none">
+      <h2>Suggested Stronger Passwords</h2>
+      <p class="suggestions-note">Generated using your password's pattern as a base — all suggestions meet strong criteria.</p>
+      <ul class="suggestions-list" id="suggestions-list"></ul>
+      <button class="btn-ghost" id="regenerate-btn">↻ Regenerate Suggestions</button>
+    </section>
+
+    <!-- Password History -->
+    <section class="card history-card" id="history">
+      <div class="history-header">
+        <h2>Password History <span class="badge" id="history-count">0</span></h2>
+        <button class="btn-ghost btn-sm" id="clear-history-btn">Clear All</button>
+      </div>
+      <p class="history-note">Stored locally in your browser. Prevents reuse of old passwords.</p>
+      <div class="history-empty" id="history-empty">
+        <span>No passwords checked yet.</span>
+      </div>
+      <ul class="history-list" id="history-list"></ul>
+      <button class="btn-primary" id="save-password-btn" style="display:none">+ Save Current Password Hash</button>
+    </section>
+
+    <!-- Tips -->
+    <section id="tips" class="tips-section">
+      <h2>Password Security Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-num">01</span>
+          <h3>Use a Passphrase</h3>
+          <p>Combine 4–5 random words. "correct-horse-battery-staple" is long, memorable, and very hard to crack.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">02</span>
+          <h3>Never Reuse Passwords</h3>
+          <p>If one site is breached, attackers try your password everywhere. Use a password manager.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">03</span>
+          <h3>Enable 2FA</h3>
+          <p>Two-factor authentication adds a second layer. Even if your password leaks, accounts stay safe.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">04</span>
+          <h3>Avoid Personal Info</h3>
+          <p>Names, birthdays, and pet names are easy for attackers to guess using social engineering.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">05</span>
+          <h3>Check for Breaches</h3>
+          <p>Use services like HaveIBeenPwned to see if your email/password appeared in known data breaches.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">06</span>
+          <h3>Change Regularly</h3>
+          <p>Update passwords every 6–12 months, especially for sensitive accounts like email and banking.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>PassGuard · Built for Internship Mini Project · All analysis runs locally in your browser · No data is collected</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
