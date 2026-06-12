@@ -22,10 +22,10 @@ A client-side password strength analyzer built as a mini internship project. Eva
 
 ```
 password-strength-analyzer/
-├── index.html   # Main UI
-├── style.css    # All styles (dark theme, responsive)
-├── script.js    # All logic (analysis, suggestions, history)
-└── README.md    # This file
+├── index.html   
+├── style.css    
+├── script.js    
+└── README.md
 ```
 
 ---
