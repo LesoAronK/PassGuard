@@ -4,6 +4,8 @@ A client-side password strength analyzer built as a mini internship project. Eva
 
 **🔒 Privacy-first:** Everything runs 100% in your browser. No passwords or data are ever sent to a server.
 
+Live Demo:https://lesoaronk.github.io/PassGuard/
+
 ---
 
 ## ✨ Features
